@@ -1,0 +1,63 @@
+#!/usr/bin/python
+
+#----------------------------------#
+# Scraper for mininova             #
+# Coded by Abhishek Nagaraj        #
+# For the Mobile Innovation Group  #
+# MIT Sloan School of Management   #
+# (c) 2011.                        #
+#----------------------------------#
+
+
+from BeautifulSoup import BeautifulSoup
+import re
+import urllib2
+count = 0
+
+
+page = urllib2.urlopen("http://torrentz.eu/so/software+windows-q")
+soup = BeautifulSoup(page)
+
+item = soup.findAll('dl')
+#item = soup.body.dl.dt.a
+
+
+
+
+for i in item:
+    count = count + 1
+
+    url = i.dt.a['href']
+    name = ''.join(i.dt.a.findAll(text=True))
+    print ''.join(i.dt.findAll(attrs=re.compile('.*png.*')))
+    print "********"
+
+    #verified = i.dt['title']
+    #print i.dt.attrs
+
+    if url!=None:
+        print i
+        print
+        print url
+        print name
+        #print verified
+        print "-----"
+
+
+    #fragment = BeautifulSoup(i)
+    #print fragment.dt.a
+    #print fragment.dd
+
+
+
+
+
+#print soup.prettify()
+
+#print item
+
+# for incident in soup('td', width="90%"):
+#     where, linebreak, what = incident.contents[:3]
+#     print where.strip()
+#     print what.strip()
+#     print
