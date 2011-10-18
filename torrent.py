@@ -7,47 +7,48 @@
 # (c) 2011.                        #
 #----------------------------------#
 
-## this library returns a hash with the following keys
+## this library returns a list of hashes with the following keys
 ## name, url, days, size, date_collected, seeds, peers, verified
 
+from BeautifulSoup import BeautifulSoup
+import re
+import urllib2
+import locale
+
+# INIT STUFF
+locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
 
 
 def getdata(url):
 
- from BeautifulSoup import BeautifulSoup
- import re
- import urllib2
- import locale
-
- # INIT STUFF
- locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
+ 
  count = 0
 
-
- # GET DATA
-
- #page = '<dl><dt style="background: transparent url(\'/img/accept.png\') no-repeat right center" title="Verified By Users"><a href="/2b946e66bf1440109b6bb2c242049752b04634b3"><b>Windows</b> 7 ULTIMATE SP1 ALL EDITIONS 32 64 bit MAFIAA</a> &#187; appz apps pc <b>software</b> applications <b>windows</b></dt><dd><span class="a"><span title="Sun, 12 Jun 2011 18:45:42">4 months ago</span></span> <span class="s">4322 Mb</span> <span class="u">2,608</span> <span class="d">1,248</span></dd></dl>'
-
-
- #page = urllib2.urlopen("http://torrentz.eu/so/software+windows-q")
  page = urllib2.urlopen(url)
 
 
  # FEED DATA TO THE SOUP!
  soup = BeautifulSoup(page)
 
-
  # FIND ALL ITEMS OF INTEREST 
  item = soup.findAll('dl')
 
- #item = soup.body.dl.dt.a
-
  # LOOK FOR OBJECTS IN ITEM
-
+ global r
+ r = list()
  for i in item:
      count = count + 1
-     if count>3 and count <5:
+     if count>3 and count <10:
+         result = getitem(i)
+         if result!=0:
+             r.append(result)
+ return r
 
+
+#getitem returns one row of the data
+
+def getitem(i):
+    
          url = i.dt.a['href']
          name = ''.join(i.dt.a.findAll(text=True))
          days = i.dd.span.span.string
@@ -64,20 +65,11 @@ def getdata(url):
              verified = 1
          else:
              verified=0
-
          
+         result = {'name' : name, 'url':"http://torrents.eu"+url, 'days':days, 'size':size, 'date_collected':date_collected, 'seeds':seeds, 'peers':peers, 'verified':verified}
 
-         if url!=None:
-             #print i
-             print
-             print "http://torrentz.eu"+ url
-             print name
-             print days
-             print size
-             print date_collected
-             print seeds, peers
-             print verified
-             print "-----"
-
- result = {'name' : name, 'url':"http://torrents.eu"+url, 'days':days, 'size':size, 'date_collected':date_collected, 'seeds':seeds, 'peers':peers, 'verified':verified}
- return result
+         if url!=None: 
+             return result
+         else:
+             return 0
+         
