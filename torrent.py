@@ -21,15 +21,10 @@ locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' )
 
 def getdata(url):
 
- 
  count = 0
-
  page = urllib2.urlopen(url)
-
-
  # FEED DATA TO THE SOUP!
  soup = BeautifulSoup(page)
-
  # FIND ALL ITEMS OF INTEREST 
  item = soup.findAll('dl')
 
@@ -38,7 +33,7 @@ def getdata(url):
  r = list()
  for i in item:
      count = count + 1
-     if count>3 and count <10:
+     if count>3:
          result = getitem(i)
          if result!=0:
              r.append(result)
@@ -65,8 +60,8 @@ def getitem(i):
              verified = 1
          else:
              verified=0
-         
-         result = {'name' : name, 'url':"http://torrents.eu"+url, 'days':days, 'size':size, 'date_collected':date_collected, 'seeds':seeds, 'peers':peers, 'verified':verified}
+
+         result = {'name' : name.strip(), 'url':"http://torrents.eu"+url.strip(), 'days':days.strip(), 'size':size.strip(), 'date_collected':date_collected.strip(), 'seeds':seeds, 'peers':peers, 'verified':verified}
 
          if url!=None: 
              return result
