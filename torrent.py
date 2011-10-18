@@ -7,6 +7,11 @@
 # (c) 2011.                        #
 #----------------------------------#
 
+## this library returns a hash with the following keys
+## name, url, days, size, date_collected, seeds, peers, verified
+
+
+
 def getdata(url):
 
  from BeautifulSoup import BeautifulSoup
@@ -41,7 +46,7 @@ def getdata(url):
 
  for i in item:
      count = count + 1
-     if count>3 and count <7:
+     if count>3 and count <5:
 
          url = i.dt.a['href']
          name = ''.join(i.dt.a.findAll(text=True))
@@ -60,9 +65,10 @@ def getdata(url):
          else:
              verified=0
 
+         
 
          if url!=None:
-             print i
+             #print i
              print
              print "http://torrentz.eu"+ url
              print name
@@ -73,4 +79,5 @@ def getdata(url):
              print verified
              print "-----"
 
- return name
+ result = {'name' : name, 'url':"http://torrents.eu"+url, 'days':days, 'size':size, 'date_collected':date_collected, 'seeds':seeds, 'peers':peers, 'verified':verified}
+ return result
