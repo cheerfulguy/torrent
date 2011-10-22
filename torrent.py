@@ -9,6 +9,7 @@
 
 ## this library returns a list of hashes with the following keys
 ## name, url, days, size, date_collected, seeds, peers, verified
+## given a page this parses that page for relevant data
 
 from BeautifulSoup import BeautifulSoup
 import re
@@ -19,10 +20,11 @@ import locale
 locale.setlocale( locale.LC_ALL, 'en_US.UTF-8' ) 
 
 
-def getdata(url):
+def getdata(page):
 
  count = 0
- page = urllib2.urlopen(url)
+ query = ""
+    
  # FEED DATA TO THE SOUP!
  soup = BeautifulSoup(page)
  # FIND ALL ITEMS OF INTEREST 
@@ -33,6 +35,7 @@ def getdata(url):
  r = list()
  for i in item:
      count = count + 1
+     
      if count>3:
          result = getitem(i)
          if result!=0:
